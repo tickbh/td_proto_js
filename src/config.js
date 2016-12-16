@@ -1,0 +1,1 @@
+var td_proto_config = td_proto_config || {}
