@@ -1,5 +1,12 @@
 
 function test_encode_u8() {
+    var config = td_proto_config;
+    var buffer = new jDataView(new Int8Array());
+    // var file = jDataView.createBuffer();
+    // var buffer = new jDataView(file);
+
+    encode_field(buffer, config, {pattern: TYPE_U8, number: 1})
+    encode_field(buffer, config, {pattern: TYPE_U8, number: 1})
 
     // let config = Config::new_empty();
     // let mut buffer = Buffer::new();

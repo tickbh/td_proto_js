@@ -1,7 +1,7 @@
 
 function encode_number(buffer, value) {
     var number = parseInt(value.number)
-    if(!value.pattern || !number) {
+    if(!value.pattern || IsNull(number)) {
         throw new Error("unkown encode number")
     }
     switch(value.pattern) {
