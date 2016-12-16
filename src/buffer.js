@@ -129,16 +129,6 @@ ByteBuffer.DEFAULT_ENDIAN = ByteBuffer.BIG_ENDIAN;
 ByteBuffer.DEFAULT_NOASSERT = false;
 
 /**
- * A `Long` class for representing a 64-bit two's-complement integer value. May be `null` if Long.js has not been loaded
- *  and int64 support is not available.
- * @type {?Long}
- * @const
- * @see https://github.com/dcodeIO/long.js
- * @expose
- */
-ByteBuffer.Long = Long || null;
-
-/**
  * @alias ByteBuffer.prototype
  * @inner
  */
@@ -2408,4 +2398,3 @@ ByteBuffer.fromUTF8 = function(str, littleEndian, noAssert) {
     return bb;
 };
 
-return ByteBuffer;
