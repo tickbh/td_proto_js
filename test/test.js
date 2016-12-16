@@ -1,6 +1,6 @@
 
 function test_encode_u8() {
-    
+
     // let config = Config::new_empty();
     // let mut buffer = Buffer::new();
     // let value = Value::U8(1 as u8);
@@ -24,4 +24,12 @@ function test_encode_u8() {
 
     // let size = buffer.read(data).unwrap();
     // assert_eq!(size, 0);
+    // 
+
+    var a = document.createElement('a');
+    document.body.appendChild(a);
+    a.innerHTML = 'test_encode_u8 success'; 
 }
+
+
+test_encode_u8()

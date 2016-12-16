@@ -30,6 +30,6 @@ function decode_number(buffer, pattern) {
         return buffer.getInt32() / 1000.0
     }
     default:
-        return null
+        throw new Error("Unknow decode number type")
     }
 }
