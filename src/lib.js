@@ -1,6 +1,6 @@
 
 function td_check_vaild(buffer, size) {
-    return buffer.byteOffset + size <= this.byteLength
+    return buffer.remaining() >= size
 }
 
 function td_check_unvaild(buffer, size) {

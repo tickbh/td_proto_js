@@ -7,31 +7,31 @@ function decode_number(buffer, pattern) {
     switch(pattern) {
     case TYPE_U8: {
         if(td_check_unvaild(buffer, 1)) return new_type_nil();
-        return {pattern: TYPE_U8, number: buffer.getUint8()}
+        return {pattern: TYPE_U8, number: buffer.readUint8()}
     }
     case TYPE_I8: {
         if(td_check_unvaild(buffer, 1)) return new_type_nil();
-        return {pattern: TYPE_I8, number: buffer.getInt8()}
+        return {pattern: TYPE_I8, number: buffer.readInt8()}
     }
     case TYPE_U16: {
         if(td_check_unvaild(buffer, 2)) return new_type_nil();
-        return {pattern: TYPE_U16, number: buffer.getUint16()}
+        return {pattern: TYPE_U16, number: buffer.readUint16()}
     }
     case TYPE_I16: {
         if(td_check_unvaild(buffer, 2)) return new_type_nil();
-        return {pattern: TYPE_I16, number: buffer.getInt16()}
+        return {pattern: TYPE_I16, number: buffer.readInt16()}
     }
     case TYPE_U32: {
         if(td_check_unvaild(buffer, 4)) return new_type_nil();
-        return {pattern: TYPE_U32, number: buffer.getUint32()}
+        return {pattern: TYPE_U32, number: buffer.readUint32()}
     }
     case TYPE_I32: {
         if(td_check_unvaild(buffer, 4)) return new_type_nil();
-        return {pattern: TYPE_I32, number: buffer.getInt32()}
+        return {pattern: TYPE_I32, number: buffer.readInt32()}
     }
     case TYPE_FLOAT: {
         if(td_check_unvaild(buffer, 4)) return new_type_nil();
-        return {pattern: TYPE_FLOAT, number: buffer.getInt32() / 1000.0}
+        return {pattern: TYPE_FLOAT, number: buffer.readInt32() / 1000.0}
     }
     default:
         throw new Error("Unknow decode number type")
@@ -68,8 +68,8 @@ function read_field(buffer) {
     var index = decode_number(buffer, TYPE_U16)
     var pattern = decode_number(buffer, TYPE_U16)
     return {
-        index: index,
-        pattern: pattern,
+        index: index.number,
+        pattern: pattern.number,
     }
 }
 

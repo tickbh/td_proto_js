@@ -30,7 +30,7 @@ function encode_number(buffer, value) {
         break;
     }
     case TYPE_FLOAT: {
-        buffer.writeInt32(parseFloat(value.value) * 1000 )
+        buffer.writeInt32(parseInt(parseFloat(value.number) * 1000))
         break;
     }
     default: {
