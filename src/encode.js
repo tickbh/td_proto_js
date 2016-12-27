@@ -132,10 +132,7 @@ function encode_field(buffer, config, value) {
         var must_type = get_array_contains_type(value)
         var list = value.list
         for (var i = 0; i < list.length; i++) {
-            if(list[i].pattern != must_type) {
-                return false
-            }
-            encode_field(buffer, config, list[i])
+            encode_field(buffer, config, td_from_value(list[i], must_type) )
         };
         write_str_field(buffer, STR_TYPE_NIL)
     }
@@ -146,7 +143,7 @@ function encode_field(buffer, config, value) {
 }
 
 function encode_proto(buffer, config, name, infos) {
-    var proto = config.get_proto_by_name(name)
+    var proto = get_proto_by_name(config, name)
     if(!proto) {
         return false
     }
@@ -155,7 +152,7 @@ function encode_proto(buffer, config, name, infos) {
     }
     encode_str_raw(buffer, {pattern: TYPE_STR, str: name})
     for(var i = 0; i < infos.length; i++) {
-        if(!encode_field(buffer, config, infos[i])) {
+        if(!encode_field(buffer, config, td_from_value(infos[i], get_type_by_name(proto.args[i])))) {
             return false
         }
     }

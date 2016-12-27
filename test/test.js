@@ -181,7 +181,7 @@ function test_encode_map() {
 
     buffer.mark(0)
     buffer.reset()
-    
+
     var read = td_into_value(decode_field(buffer, config))
     console.assert(IsNull(read["undefine"]), "Type Not Match");
 
@@ -190,92 +190,72 @@ function test_encode_map() {
     a.innerHTML = 'test_encode_map success<br/>'; 
 }
 
-// #[test]
-// fn test_encode_map() {
-//     let config = td_rp::Config::new(" { \"name\" : { \"index\" :    1, \"pattern\" : \"string\" }, \
-//                                         \"index\" : { \"index\" :    2, \"pattern\" : \"u16\" },  \
-//                                         \"sub_name\" : { \"index\" :    3, \"pattern\" :\"string\" }   }",
-//         "{\"cmd_test_op\"        : { \"msg_type\" :    \"server\", \"args\" : [ \"map\" ] }}");
-//     let config = config.unwrap();
-//     let mut hash_value = HashMap::<String, Value>::new();
-//     hash_value.insert("name".to_string(), Value::Str("I'm a chinese people".to_string()));
-//     hash_value.insert("sub_name".to_string(), Value::Str("tickdream".to_string()));
-//     hash_value.insert("index".to_string(), Value::U16(1 as u16));
-//     {
-//         let mut buffer = Buffer::new();
-//         td_rp::encode_field(&mut buffer, &config, &Value::Map(hash_value.clone())).unwrap();
+function test_encode_array_u8() {
 
-//         // just read field
-//         let read = td_rp::decode_field(&mut buffer, &config).unwrap();
-//         match read {
-//             Value::Map(val) => assert_eq!(val, hash_value),
-//             _ => unreachable!("it will not read"),
-//         }
-//     }
+    var config = td_proto_config;
+    var buffer = new ByteBuffer();
 
-//     let mut undefine = hash_value.clone();
-//     undefine.insert("undefine".to_string(), Value::U16(1 as u16));
-//     {
-//         let mut buffer = Buffer::new();
-//         td_rp::encode_field(&mut buffer, &config, &Value::Map(undefine.clone())).unwrap();
+    var value = []
+    for(var i = 0; i < 10; i++) {
+        value.push(i);
+    }
 
-//         // just read field
-//         let read = td_rp::decode_field(&mut buffer, &config).unwrap();
-//         match read {
-//             Value::Map(val) => assert_eq!(val, hash_value),
-//             _ => unreachable!("it will not read"),
-//         }
-//     }
-// }
+    encode_field(buffer, config, td_from_value(value, TYPE_AU8))
 
-// #[test]
-// fn test_encode_array_u8() {
-//     let config = Config::new_empty();
-//     let mut array : Vec<Value> = vec![];
-//     for i in 0 .. 10 {
-//         array.push(Value::U8(i as u8));
-//     }
+    buffer.mark(0)
+    buffer.reset()
 
-//     let mut buffer = Buffer::new();
-//     td_rp::encode_field(&mut buffer, &config, &Value::AU8(array.clone())).unwrap();
+    var read = td_into_value(decode_field(buffer, config))
+    console.assert(read.length == 10, "Type Not Match");
+    for(var i = 0; i < 10; i++) {
+        console.assert(read[i] == i, "Type Not Match");
+    }
 
-//     let read = td_rp::decode_field(&mut buffer, &config).unwrap();
-//     match read {
-//         Value::AU8(ref val) => {
-//             assert_eq!(*val, array);
-//         },
-//         _ => unreachable!("it will not read"),
-//     }
-// }
+    var a = document.createElement('a');
+    document.body.appendChild(a);
+    a.innerHTML = 'test_encode_array_u8 success<br/>'; 
+}
+
+function test_base_proto() {
+
+    td_reinit_proto("{ \
+        \"field\":  { \"name\" : { \"index\" :    1, \"pattern\" : \"str\" }, \
+                    \"index\" : { \"index\" :    2, \"pattern\" : \"u16\" },  \
+                    \"sub_name\" : { \"index\" :    3, \"pattern\" :\"str\" }}, \
+        \"proto\":   {\"cmd_test_op\"        : { \"msg_type\" :    \"server\", \"args\" : [ \"map\" ] }}\
+    }")
 
 
-// #[test]
-// fn test_base_proto() {
-//     let config = td_rp::Config::new(" { \"name\" : { \"index\" :    1, \"pattern\" : \"string\" }, \
-//                                         \"index\" : { \"index\" :    2, \"pattern\" : \"u16\" },  \
-//                                         \"sub_name\" : { \"index\" :    3, \"pattern\" :\"string\" }   }",
-//         "{\"cmd_test_op\"        : { \"msg_type\" :    \"server\", \"args\" : [ \"map\" ] }}");
-//     let config = config.unwrap();
-//     let mut hash_value = HashMap::<String, Value>::new();
-//     hash_value.insert("name".to_string(), Value::Str("I'm a chinese people".to_string()));
-//     hash_value.insert("sub_name".to_string(), Value::Str("tickdream".to_string()));
-//     hash_value.insert("index".to_string(), Value::U16(1 as u16));
+    var config = td_proto_config;
+    var buffer = new ByteBuffer();
 
-//     {
-//         let mut buffer = Buffer::new();
-//         td_rp::encode_proto(&mut buffer, &config, &"cmd_test_op".to_string(), vec![Value::Map(hash_value.clone())]).unwrap();
+    var value = {}
+    value["name"] = "I'm a chinese people"
+    value["sub_name"] = "tickdream"
+    value["index"] = 1
 
-//         // just read field
-//         let read = td_rp::decode_proto(&mut buffer, &config).unwrap();
-//         match read {
-//             (name, val) => {
-//                 assert_eq!(name, "cmd_test_op".to_string());
-//                 assert_eq!(val[0], Value::Map(hash_value));
-//                 assert_eq!(val.len(), 1);
-//             }
-//         }
-//     }
-// }
+    encode_proto(buffer, config, "cmd_test_op", [value])
+
+    buffer.mark(0)
+    buffer.reset()
+
+    var read = decode_proto(buffer, config)
+    console.assert(read != null, "read not null")
+
+    console.assert(read.proto == "cmd_test_op", "read name null")
+    console.assert(read.list.length == 1, "read name null")
+
+    var read_value = read.list[0]
+    for(var k in value) {
+        console.assert(value[k] == read_value[k], "Type Not Match");
+    }
+
+
+    var a = document.createElement('a');
+    document.body.appendChild(a);
+    a.innerHTML = 'test_base_proto success<br/>'; 
+}
+
 
 test_encode_u8()
 test_encode_u16()
@@ -283,3 +263,5 @@ test_encode_u32()
 test_encode_float()
 test_encode_str()
 test_encode_map()
+test_encode_array_u8()
+test_base_proto()

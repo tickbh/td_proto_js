@@ -109,7 +109,7 @@ function decode_by_field(buffer, config, field) {
             if(sub_value.pattern == TYPE_NIL) {
                 break;
             }
-            list.push(sub_value)
+            list.push(td_into_value(sub_value))
         }
         return {pattern: t, list: list}
     } 
@@ -152,7 +152,7 @@ function decode_proto(buffer, config) {
         if(sub_value.pattern == TYPE_NIL) {
             break
         }
-        list.push(sub_value)
+        list.push(td_into_value(sub_value))
     }
     var proto = get_proto_by_name(config, name)
     if(!proto) {
