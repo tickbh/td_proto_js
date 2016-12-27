@@ -36,7 +36,7 @@ function td_reinit_proto(config) {
     for(var k in config.field) {
         var value = config.field[k]
         value.pattern = get_type_by_name(value.pattern)
-        config.index_field[value.index] = value
+        config.index_field[value.index] = k
     }
 
     for(var k in config.proto) {

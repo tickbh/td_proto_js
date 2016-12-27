@@ -147,9 +147,9 @@ function test_encode_str() {
 function test_encode_map() {
     td_reinit_proto({
         field : {
-            name                  : { index :    1, pattern : "string" },
+            name                  : { index :    1, pattern : "str" },
             index                 : { index :    2, pattern : "u16" },
-            name1                 : { index :    3, pattern : "string" }
+            sub_name              : { index :    3, pattern : "str" }
         },
         proto: {
             cmd_achieve_op        : { index :    1, args : [ "map" ] }
@@ -169,12 +169,21 @@ function test_encode_map() {
 
     buffer.mark(0)
     buffer.reset()
-    
-    var read = decode_field(buffer, config)
+
+    var read = td_into_value(decode_field(buffer, config))
     for(var k in value) {
         console.assert(value[k] == read[k], "Type Not Match");
     }
 
+    value["undefine"] = 1
+    var buffer = new ByteBuffer();
+    encode_field(buffer, config, td_from_value(value, TYPE_MAP));
+
+    buffer.mark(0)
+    buffer.reset()
+    
+    var read = td_into_value(decode_field(buffer, config))
+    console.assert(IsNull(read["undefine"]), "Type Not Match");
 
     var a = document.createElement('a');
     document.body.appendChild(a);

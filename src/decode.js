@@ -134,9 +134,9 @@ function decode_map(buffer, config) {
         if (field.pattern == TYPE_NIL) {
             break
         }
-        var sub_value = decode_field(buffer, config)
+        var sub_value = td_into_value(decode_field(buffer, config))
         var name = get_field_index_name(config, field.index)
-        if(!name) {
+        if(!sub_value || !name) {
             continue
         }
         map[name] = sub_value

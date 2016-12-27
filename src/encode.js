@@ -65,8 +65,8 @@ function encode_map(buffer, config, value) {
         case TYPE_MAP: {
             var map = value.map
             for(var name in map) {
-                var field = config.get_field_by_name(name)
-                if(!field) {
+                var field = get_field_by_name(config, name)
+                if(field) {
                     write_field(buffer, field)
                     encode_field(buffer, config, td_from_value(map[name], field.pattern))
                 }
@@ -87,7 +87,7 @@ function write_field(buffer, field) {
     }
 
     encode_number(buffer, {pattern: TYPE_U16, number: field.index})
-    encode_number(buffer, {pattern: TYPE_U16, number: get_type_by_name(field.pattern)})
+    encode_number(buffer, {pattern: TYPE_U16, number: field.pattern})
     return true
 }
 
