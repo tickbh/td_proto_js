@@ -136,7 +136,7 @@ function test_encode_str() {
 
 
     var field = decode_field(buffer, td_proto_config)
-    console.assert(field.pattern == TYPE_FLOAT, "Type Not Match");
+    console.assert(field.pattern == TYPE_STR, "Type Not Match");
     console.assert(field.str == str, "UTF8 Not Match");
 
     var a = document.createElement('a');
@@ -144,35 +144,42 @@ function test_encode_str() {
     a.innerHTML = 'test_encode_str success<br/>'; 
 }
 
-// #[test]
-// fn test_encode_str() {
-//     let config = Config::new_empty();
-//     let mut buffer = Buffer::new();
-//     let name = "I'm a chinese people";
-//     let value = Value::Str(name.to_string());
-//     td_rp::encode_field(&mut buffer, &config, &value).unwrap();
-//     td_rp::encode_field(&mut buffer, &config, &value).unwrap();
+function test_encode_map() {
+    td_reinit_proto({
+        field : {
+            name                  : { index :    1, pattern : "string" },
+            index                 : { index :    2, pattern : "u16" },
+            name1                 : { index :    3, pattern : "string" }
+        },
+        proto: {
+            cmd_achieve_op        : { index :    1, args : [ "map" ] }
+        }
+    });
 
-//     // first read field
-//     test_head_field(&mut buffer, 0, td_rp::TYPE_STR);
 
-//     let len = match td_rp::decode_number(&mut buffer, td_rp::TYPE_U16).unwrap() {
-//         Value::U16(val) => val,
-//         _ => panic!("error"),
-//     };
-//     let mut rv = vec![0; len as usize];
-//     let size = buffer.read(&mut rv[..]).unwrap();
-//     assert_eq!(size, len as usize);
-//     let val = String::from_utf8(rv).unwrap();
-//     assert_eq!(&*val, name);
+    var config = td_proto_config;
+    var buffer = new ByteBuffer();
 
-//     // second read field
-//     let read = td_rp::decode_field(&mut buffer, &config).unwrap();
-//     match read {
-//         Value::Str(val) => assert_eq!(&*val, name),
-//         _ => unreachable!("it will not read"),
-//     }
-// }
+    var value = {}
+    value["name"] = "I'm a chinese people"
+    value["sub_name"] = "tickdream"
+    value["index"] = 1
+
+    encode_field(buffer, config, td_from_value(value, TYPE_MAP));
+
+    buffer.mark(0)
+    buffer.reset()
+    
+    var read = decode_field(buffer, config)
+    for(var k in value) {
+        console.assert(value[k] == read[k], "Type Not Match");
+    }
+
+
+    var a = document.createElement('a');
+    document.body.appendChild(a);
+    a.innerHTML = 'test_encode_map success<br/>'; 
+}
 
 // #[test]
 // fn test_encode_map() {
@@ -266,3 +273,4 @@ test_encode_u16()
 test_encode_u32()
 test_encode_float()
 test_encode_str()
+test_encode_map()

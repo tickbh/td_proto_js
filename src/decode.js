@@ -42,21 +42,21 @@ function decode_str_raw(buffer, pattern) {
     switch(pattern) {
     case TYPE_STR: {
         if(td_check_unvaild(buffer, 2)) return new_type_nil();
-        var length = decode_number(buffer, TYPE_U16)
+        var length = decode_number(buffer, TYPE_U16).number
         if(length == 0) {
             return {pattern: TYPE_STR, str: ""}
         }
         if(td_check_unvaild(buffer, length)) return new_type_nil();
-        return {pattern: TYPE_STR, str: buffer.getString(length)}
+        return {pattern: TYPE_STR, str: buffer.readUTF8String(length)}
     }
     case TYPE_RAW: {
         if(td_check_unvaild(buffer, 2)) return new_type_nil();
-        var length = decode_number(buffer, TYPE_U16)
+        var length = decode_number(buffer, TYPE_U16).number
         if(length == 0) {
             return {pattern: TYPE_RAW, str: ""}
         }
         if(td_check_unvaild(buffer, length)) return new_type_nil();
-        return {pattern: TYPE_RAW, str: buffer.getString(length)}
+        return {pattern: TYPE_RAW, str: buffer.readUTF8String(length)}
     }
     default:
         throw new Error("Unknow decode str type")

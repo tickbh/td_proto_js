@@ -65,16 +65,13 @@ function encode_map(buffer, config, value) {
         case TYPE_MAP: {
             var map = value.map
             for(var name in map) {
-
+                var field = config.get_field_by_name(name)
+                if(!field) {
+                    write_field(buffer, field)
+                    encode_field(buffer, config, td_from_value(map[name], field.pattern))
+                }
             }
-            //             for (name, sub_value) in val {
-//                 if try!(write_field(buffer, config.get_field_by_name(name))) {
-//                     try!(encode_field(buffer, config, sub_value));
-//                 }
-//             }
-//             try!(write_str_field(buffer, STR_TYPE_NIL));
-            encode_number(buffer, {pattern: TYPE_U16, number: value.str.length})
-            buffer.writeString(value.str)
+            write_str_field(buffer, STR_TYPE_NIL)
             break;
         }
         default: {

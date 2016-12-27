@@ -1874,6 +1874,7 @@ ByteBufferPrototype.resize = function(capacity) {
         view.set(this.view);
         this.buffer = buffer;
         this.view = view;
+        this.limit = this.buffer.byteLength
     }
     return this;
 };

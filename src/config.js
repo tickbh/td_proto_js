@@ -26,6 +26,9 @@ function get_proto_msg_type(config, name) {
 }
 
 function td_reinit_proto(config) {
+    if(typeof(config) == "string") {
+        config = JSON.parse(config)
+    }
     config.field = config.field || {}
     config.proto = config.proto || {}
     config.index_field = {}
