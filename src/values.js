@@ -59,6 +59,7 @@ function get_type_by_name(name) {
         case STR_TYPE_RAW: return TYPE_RAW;
         case STR_TYPE_MAP: return TYPE_MAP;
         case STR_TYPE_AU8: return TYPE_AU8;
+        case STR_TYPE_AI8: return TYPE_AI8;
         case STR_TYPE_AU16: return TYPE_AU16;
         case STR_TYPE_AI16: return TYPE_AI16;
         case STR_TYPE_AU32: return TYPE_AU32;
@@ -85,6 +86,7 @@ function get_name_by_type(index) {
         case TYPE_RAW: return STR_TYPE_RAW;
         case TYPE_MAP: return STR_TYPE_MAP;
         case TYPE_AU8: return STR_TYPE_AU8;
+        case TYPE_AI8: return STR_TYPE_AI8;
         case TYPE_AU16: return STR_TYPE_AU16;
         case TYPE_AI16: return STR_TYPE_AI16;
         case TYPE_AU32: return STR_TYPE_AU32;

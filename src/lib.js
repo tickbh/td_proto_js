@@ -28,6 +28,7 @@ function td_from_value(value, type) {
     case TYPE_MAP:
         return {pattern: type, map: value}
     case TYPE_AU8:
+    case TYPE_AI8:
     case TYPE_AU16:
     case TYPE_AI16:
     case TYPE_AU32:
@@ -58,6 +59,7 @@ function td_into_value(value) {
     case TYPE_MAP:
         return value.map
     case TYPE_AU8:
+    case TYPE_AI8:
     case TYPE_AU16:
     case TYPE_AI16:
     case TYPE_AU32:

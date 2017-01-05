@@ -136,7 +136,7 @@ function decode_map(buffer, config) {
         }
         var sub_value = td_into_value(decode_field(buffer, config))
         var name = get_field_index_name(config, field.index)
-        if(!sub_value || !name) {
+        if(IsNull(sub_value) || IsNull(name)) {
             continue
         }
         map[name] = sub_value

@@ -26,7 +26,7 @@ function encode_number(buffer, value) {
         break;
     }
     case TYPE_I32: {
-        buffer.writeInt16(number)
+        buffer.writeInt32(number)
         break;
     }
     case TYPE_FLOAT: {
